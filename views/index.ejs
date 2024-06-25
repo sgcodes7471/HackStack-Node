@@ -8,18 +8,18 @@
 </head>
 <body>
     <div class="outer-wrapper flex">
-        <div class="inner-wrapper">
+        <div class="inner-wrapper" id="form-wrapper">
             <h2>Add Products!</h2>
             <form action="/add-product" method="POST" onsubmit="">
-                <input type="text" name="name" placeholder="Enter your Product name"  required>
-                <input type="number" name="quantity" placeholder="0"  required>
+                <input type="text" class="field-input" name="name" placeholder="Enter your Product name"  required>
+                <input type="number" class="field-input" name="quantity" placeholder="0"  required>
                 <span>
-                <label for="unit"><b>Unit:</b></label>
-                <input type="radio" name="unit" value="unit" required>unit
-                <input type="radio" name="unit" value="Kgs" required>Kgs
-                <input type="radio" name="unit" value="gms" required>gms
-                <input type="radio" name="unit" value="mg" required>mg
-                <input type="radio" name="unit" value="lits" required>lits
+                    <label for="unit"><b>Unit:</b></label>
+                    <input type="radio" name="unit" value="unit" class="radio-btn" required>unit
+                    <input type="radio" name="unit" value="Kgs" class="radio-btn" required>Kgs
+                    <input type="radio" name="unit" value="gms" class="radio-btn" required>gms
+                    <input type="radio" name="unit" value="mg" class="radio-btn" required>mg
+                    <input type="radio" name="unit" value="lits" class="radio-btn" required>lits
                 </span>
                 <input class="submit-btn" type="submit" value="Add Product"/>
             </form>
@@ -28,14 +28,30 @@
             <% if(products.length>0){ %>
                 <% products.forEach((product)=>{ %>
                     <div class="product-card">
-                    <p><%= product.name %> - <%= product.quantity%> <%= product.unit %></p>
-                    <button class="del-btn">DEL</button>
+                        <p><%= product.name %> - <%= product.quantity%> <%= product.unit %></p>
+                        <button class="del-btn" onclick="handleDelProduct('<%=product.id%>')">DEL</button>
                     </div>
-                <% }) %>
-            <% }else{%>
-                <div>Add Products</div>
-            <% }%>
-        </div>
-    </div>
-</body>
-</html>
+                    <% }) %>
+                    <% }else{%>
+                        <div>No Products added!</div>
+                        <% }%>
+                    </div>
+                </div>
+            </body>
+            <script >
+                const handleDelProduct = async (id)=>{
+                    try{
+                        const response =  await fetch(`http://localhost:5000/del-product/${id}` , {
+                        method:'DELETE',
+                    })
+                    const data = await response.json()
+
+                    if(response.status!==200)
+                        throw new Error(data.message)
+                    window.location.href = '/'
+                    }catch(error){
+                        alert('Product could not be Deleted')
+                    }
+                }
+            </script>
+            </html>

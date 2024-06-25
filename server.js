@@ -8,23 +8,39 @@ app.set('view engine'  , 'ejs')
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname , 'public')))
 
-const products = []
+let products = []
 
 app.get('/', (req, res)=>{
+    console.log(products)
     res.render('index' , { title:'HOME',products:products})
 })
 
+
 app.post('/add-product' , (req, res)=>{
-    const product = {name:req.body.name , quantity:req.body.quantity , unit:req.body.unit , id:Date.now()}
-    products.unshift(product)
-    console.log(products)
+    const product = {name:req.body.name , quantity:parseInt(req.body.quantity , 10) , unit:req.body.unit , id:Date.now()}
+    let alreadyExist=false
+    products.map(item => {
+        if(product.name === item.name && product.unit === item.unit){
+            alreadyExist=true
+            item.quantity+=parseInt(product.quantity , 10)
+        }
+    })
+    if(!alreadyExist)  
+        products.unshift(product)
     res.redirect('/')
 })
 
+
 app.delete('/del-product/:productId' , (req, res)=>{
-    const productDel = req.params.productId
-    products.filter((product)=>{product.id!=productDel})
-    res.redirect('/')
+    const productDel = parseInt(req.params.productId , 10)
+    let length = products.length
+    products=products.filter(product=>{
+        return product.id!==productDel
+    })
+    if(length>products.length)
+        res.status(200).json({"message":"Deletion Successful"})
+    else 
+        res.status(400).json({"message":"Deletion failed"})
 })
 
 app.use((req, res)=>{

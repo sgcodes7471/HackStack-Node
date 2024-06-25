@@ -6,9 +6,9 @@
     border-radius: 5px;
 }
 body{
-    background-color: rgb(219, 219, 219);
+    background-color: rgb(241, 241, 241);
 }
-.flex{
+.flex , .error-wrapper{
     display: flex;
     justify-content: center;
 }
@@ -60,4 +60,40 @@ input{
     padding: 5px;
     border: none;
     color: white;
+}
+@media screen and (max-width:808px) {
+    .outer-wrapper{
+        flex-direction: column;
+    }
+    .inner-wrapper{
+        width: 100%;
+        margin:10px 0px;
+        padding: 0px;
+    }
+    form{
+        align-items: center;
+    }
+    #form-wrapper{
+        height: fit-content;
+    }
+    h2{
+        text-align: center;
+    }
+    .field-input{
+        width:70vw ;
+    }
+    label{
+        display: none;
+    }
+    .radio-btn{
+        margin: 10px 3px;
+    }
+}
+@media screen and (max-width:300px) {
+    .radio-btn{
+        margin: 10px 0px;
+    }
+    .outer-wrapper{
+        padding: 15px;
+    }
 }
